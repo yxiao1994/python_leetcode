@@ -36,4 +36,4 @@ class Solution(object):
 if __name__ == "__main__":
     obj = Solution()
     print(obj.exist([["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]],
-    "ABCCED"))
+                    "ABCCED"))
