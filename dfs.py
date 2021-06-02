@@ -32,6 +32,26 @@ class Solution(object):
                     return True
         return False
 
+    def permutation(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        res = []
+        temp = list(s)
+
+        def dfs(start, n):
+            if start == n:
+                res.append(temp[:])
+                return
+            for i in range(start, n):
+                temp[start], temp[i] = temp[i], temp[start]
+                dfs(start + 1, n)
+                temp[start], temp[i] = temp[i], temp[start]
+
+        dfs(0, len(temp))
+        return list(set([''.join(x) for x in res]))
+
 
 if __name__ == "__main__":
     obj = Solution()
