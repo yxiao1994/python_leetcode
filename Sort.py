@@ -2,6 +2,33 @@ import heapq
 
 
 class Solution(object):
+    def minNumber(self, nums):
+        """
+        把数组排成最小的数
+        :type nums: List[int]
+        :rtype: str
+        """
+
+        def partition(nums, p, r):
+            i = p - 1
+            for j in range(p, r):
+                if nums[j] + nums[r] <= nums[r] + nums[j]:
+                    i += 1
+                    nums[i], nums[j] = nums[j], nums[i]
+            i += 1
+            nums[i], nums[r] = nums[r], nums[i]
+            return i
+
+        def quick_sort(nums, p, r):
+            if p < r:
+                q = partition(nums, p, r)
+                quick_sort(nums, p, q - 1)
+                quick_sort(nums, q + 1, r)
+
+        nums = [str(x) for x in nums]
+        quick_sort(nums, 0, len(nums) - 1)
+        return ''.join(nums)
+
     def getLeastNumbers(self, arr, k):
         """
         数组中最小的k个数

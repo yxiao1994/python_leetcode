@@ -52,6 +52,28 @@ class Solution(object):
         dfs(0, len(temp))
         return list(set([''.join(x) for x in res]))
 
+    def numIslands(self, grid):
+        # 岛屿个数
+        def dfs(grid, x, y, m, n):
+            grid[x][y] = 0
+            directions = ((-1, 0), (1, 0), (0, 1), (0, -1))
+            for dx, dy in directions:
+                x_new = x + dx
+                y_new = y + dy
+                if 0 <= x_new < m and 0 <= y_new < n and grid[x_new][y_new] == 1:
+                    dfs(grid, x_new, y_new, m, n)
+
+        m = len(grid)
+        if m == 0:
+            return 0
+        n = len(grid[0])
+        res = 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    res += 1
+                    dfs(grid, i, j, m, n)
+        return res
 
 if __name__ == "__main__":
     obj = Solution()
