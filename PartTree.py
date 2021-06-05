@@ -62,7 +62,7 @@ class Solution(object):
 
     def isSubStructure(self, A, B):
         """
-        判断树B是否A的子结构
+        判断树B是否树A的子结构
         :type A: TreeNode
         :type B: TreeNode
         :rtype: bool
