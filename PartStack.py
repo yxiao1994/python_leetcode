@@ -17,3 +17,42 @@ class CQueue(object):
                 self.s2.append(temp)
         val = self.s2.pop()
         return val
+
+
+class MinStack(object):
+    # 包含最小元素的栈
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.A = []
+        self.B = []
+
+    def push(self, x):
+        """
+        :type x: int
+        :rtype: None
+        """
+        self.A.append(x)
+        if not self.B or x <= self.B[-1]:
+            self.B.append(x)
+
+    def pop(self):
+        """
+        :rtype: None
+        """
+        x = self.A.pop()
+        if x == self.B[-1]:
+            self.B.pop()
+
+    def top(self):
+        """
+        :rtype: int
+        """
+        return self.A[-1]
+
+    def min(self):
+        """
+        :rtype: int
+        """
+        return self.B[-1]

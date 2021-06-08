@@ -39,3 +39,60 @@ class Solution:
             else:
                 right -= 1
         return res
+
+    def spiralOrder(self, matrix):
+        """
+        顺时针打印矩阵/螺旋打印矩阵
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        res = []
+        m = len(matrix)
+        if m == 0:
+            return res
+        n = len(matrix[0])
+        left = 0
+        right = n - 1
+        top = 0
+        bottom = m - 1
+
+        while left <= right and top <= bottom:
+            for i in range(left, right + 1):
+                res.append(matrix[top][i])
+            top += 1
+
+            for i in range(top, bottom + 1):
+                res.append(matrix[i][right])
+            right -= 1
+
+            if left <= right and top <= bottom:
+                for i in range(right, left - 1, -1):
+                    res.append(matrix[bottom][i])
+                bottom -= 1
+
+                for i in range(bottom, top - 1, -1):
+                    res.append(matrix[i][left])
+                left += 1
+
+        return res
+
+    def lengthOfLongestSubstring(self, s):
+        """
+        最长不重复子串
+        :type s: str
+        :rtype: int
+        """
+        char_set = set()
+        j = 0
+        i = 0
+        res = 0
+        while j < len(s):
+            if s[j] not in char_set:
+                char_set.add(s[j])
+                j += 1
+                if res < j - i:
+                    res = j - i
+            else:
+                char_set.remove(s[i])
+                i += 1
+        return res

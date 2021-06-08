@@ -82,3 +82,54 @@ class Solution(object):
                 return True
             return self.isSubStructure(A.left, B) or self.isSubStructure(A.right, B)
         return False
+
+    def binaryTreePaths(self, root):
+        # write your code here
+        # 从根节点到叶子节点的所有路径
+        res = []
+        temp = []
+
+        def dfs(root):
+            if not root:
+                return
+            temp.append(str(root.val))
+            if not root.left and not root.right:
+                res.append(temp[:])
+            dfs(root.left)
+            dfs(root.right)
+            temp.pop()
+
+        dfs(root)
+        return ['->'.join(x) for x in res]
+
+
+class Codec:
+
+    def serialize(self, root):
+        """Encodes a tree to a single string.
+
+        :type root: TreeNode
+        :rtype: str
+        """
+        if not root:
+            return '#'
+        return str(root.val) + ',' + self.serialize(root.left) + ',' + self.serialize(root.right)
+
+    def help_deseralize(self, l):
+        if not l:
+            return None
+        x = l.pop(0)
+        root = None
+        if x != '#':
+            root = TreeNode(int(x))
+            root.left = self.help_deseralize(l)
+            root.right = self.help_deseralize(l)
+        return root
+
+    def deserialize(self, data):
+        """Decodes your encoded data to tree.
+
+        :type data: str
+        :rtype: TreeNode
+        """
+        return self.help_deseralize(data.split(','))
