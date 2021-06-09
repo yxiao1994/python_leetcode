@@ -56,3 +56,20 @@ class MinStack(object):
         :rtype: int
         """
         return self.B[-1]
+
+
+class Solution(object):
+    def validateStackSequences(self, pushed, popped):
+        """
+        栈的压入弹出序列
+        :type pushed: List[int]
+        :type popped: List[int]
+        :rtype: bool
+        """
+        stack, i = [], 0
+        for num in pushed:
+            stack.append(num)  # num 入栈
+            while stack and stack[-1] == popped[i]:  # 循环判断与出栈
+                stack.pop()
+                i += 1
+        return not stack

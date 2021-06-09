@@ -1,4 +1,5 @@
 import heapq
+import random
 
 
 class Solution(object):
@@ -71,7 +72,115 @@ class Solution(object):
         n = len(nums) - n + 1
         return kthminElement(n, nums, 0, len(nums) - 1)
 
+    def partition(self, nums, p, r):
+        i = p - 1
+        for j in range(p, r):
+            if nums[j] <= nums[r]:
+                i += 1
+                nums[i], nums[j] = nums[j], nums[i]
+        i += 1
+        nums[i], nums[r] = nums[r], nums[i]
+        return i
+
+    def _quick_sort(self, nums, p, r):
+        if p < r:
+            q = self.partition(nums, p, r)
+            self._quick_sort(nums, p, q - 1)
+            self._quick_sort(nums, q + 1, r)
+
+    def QuickSort(self, nums):
+        self._quick_sort(nums, 0, len(nums) - 1)
+
+    def merge_array(self, nums, left, mid, right):
+        L = nums[left: mid + 1]
+        R = nums[mid + 1: right + 1]
+        L.append(float('inf'))
+        R.append(float('inf'))
+        i, j = 0, 0
+        for k in range(left, right + 1):
+            if L[i] <= R[j]:
+                nums[k] = L[i]
+                i += 1
+            else:
+                nums[k] = R[j]
+                j += 1
+
+    def _merge_sort(self, nums, left, right):
+        if left < right:
+            mid = (left + right) // 2
+            self._merge_sort(nums, left, mid)
+            self._merge_sort(nums, mid + 1, right)
+            self.merge_array(nums, left, mid, right)
+
+    def MergeSort(self, nums):
+        # 归并排序
+        self._merge_sort(nums, 0, len(nums) - 1)
+
+    def heapify(self, nums, i, n):
+        while i < n:
+            child = i * 2 + 1
+            if child >= n:
+                break
+            if child + 1 < n and nums[child] < nums[child + 1]:
+                child += 1
+            if nums[i] < nums[child]:
+                nums[i], nums[child] = nums[child], nums[i]
+                i = child
+            else:
+                break
+
+    def build_heap(self, nums):
+        n = len(nums)
+        i = n // 2 - 1
+        while i >= 0:
+            self.heapify(nums, i, n)
+            i -= 1
+
+    def HeapSort(self, nums):
+        # 堆排序
+        self.build_heap(nums)
+        i = len(nums) - 1
+        while i > 0:
+            nums[0], nums[i] = nums[i], nums[0]
+            self.heapify(nums, 0, i)
+            i -= 1
+
+    def merge_sort(self, nums, left, right):
+        if left >= right:
+            return 0
+        mid = (left + right) // 2
+        left_count = self.merge_sort(nums, left, mid)
+        right_count = self.merge_sort(nums, mid + 1, right)
+        count = 0
+        L = nums[left: mid + 1]
+        R = nums[mid + 1: right + 1]
+        L.append(float('inf'))
+        R.append(float('inf'))
+        i = 0
+        j = 0
+        for k in range(left, right + 1):
+            if L[i] <= R[j]:
+                count += j
+                nums[k] = L[i]
+                i += 1
+            else:
+                nums[k] = R[j]
+                j += 1
+        return left_count + right_count + count
+
+    def reversePairs(self, nums):
+        """
+        数组中的逆序对
+        :type nums: List[int]
+        :rtype: int
+        """
+        return self.merge_sort(nums, 0, len(nums) - 1)
+
 
 if __name__ == "__main__":
     obj = Solution()
-    print(obj.getLeastNumbers([1, 3, 4, 5, 6, 7], 2))
+    nums = list(range(50))
+    random.shuffle(nums)
+    print(nums)
+    obj.HeapSort(nums)
+    print(nums)
