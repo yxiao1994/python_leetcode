@@ -1,3 +1,6 @@
+from collections import deque
+
+
 class TreeNode(object):
     def __init__(self, val=0, left=None, right=None):
         self.val = val
@@ -6,8 +9,72 @@ class TreeNode(object):
 
 
 class Solution(object):
+    def preorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        res = []
+        if not root:
+            return res
+        stack = []
+        while stack or root:
+            while root:
+                res.append(root.val)
+                stack.append(root)
+                root = root.left
+            root = stack.pop()
+            root = root.right
+        return res
+
+    def inorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        res = []
+        if not root:
+            return res
+        stack = []
+        while stack or root:
+            while root:
+                stack.append(root)
+                root = root.left
+            root = stack.pop()
+            res.append(root.val)
+            root = root.right
+        return res
+
+    def _BuildTree(self, preorder, inorder, Pre_left, Pre_right, In_left, In_right):
+        if len(preorder) == 0:
+            return None
+        if Pre_left > Pre_right or In_left > In_right:
+            return None
+        left_tree_len = 0
+        In_index = In_left
+        while In_index < In_right and inorder[In_index] != preorder[Pre_left]:
+            In_index += 1
+            left_tree_len += 1
+
+        root = TreeNode(preorder[Pre_left])
+        root.left = self._BuildTree(preorder, inorder, Pre_left + 1, Pre_left + left_tree_len, In_left, In_index - 1)
+        root.right = self._BuildTree(preorder, inorder, Pre_left + left_tree_len + 1, Pre_right, In_index + 1, In_right)
+        return root
+
+    def buildTree(self, preorder, inorder):
+        """
+        从前序与中序遍历序列构造二叉树
+        :type preorder: List[int]
+        :type inorder: List[int]
+        :rtype: TreeNode
+        """
+        if len(preorder) == 0 or len(inorder) == 0:
+            return None
+        return self._BuildTree(preorder, inorder, 0, len(preorder) - 1, 0, len(inorder) - 1)
+
     def pathSum(self, root, target):
         """
+        和为某一值的路径
         :type root: TreeNode
         :type target: int
         :rtype: List[List[int]]
@@ -60,6 +127,93 @@ class Solution(object):
                 queue.append(r.right)
         return res
 
+    def zigzagLevelOrder(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        res = []
+        if not root:
+            return res
+        queue = [root]
+        flag = True
+        while queue:
+            temp_num = len(queue)
+            temp = deque([])
+            for _ in range(temp_num):
+                node = queue.pop(0)
+                if flag:
+                    temp.append(node.val)
+                else:
+                    temp.appendleft(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res.append(list(temp))
+            flag = not flag
+        return res
+
+    def generateTrees(self, n):
+        """
+        生成并返回所有由 n 个节点组成且节点值从 1 到 n
+        互不相同的不同 二叉搜索树
+        :type n: int
+        :rtype: List[TreeNode]
+        """
+
+        def generateBST(min_val, max_val):
+            if min_val > max_val:
+                return [None]
+            res = []
+            for root_val in range(min_val, max_val + 1):
+                for left_tree in generateBST(min_val, root_val - 1):
+                    for right_tree in generateBST(root_val + 1, max_val):
+                        root = TreeNode(root_val)
+                        root.left = left_tree
+                        root.right = right_tree
+                        res.append(root)
+            return res
+
+        return generateBST(1, n) if n else []
+
+    def isValidBST(self, root):
+        """
+        判断是否是二叉搜索树
+        :type root: TreeNode
+        :rtype: bool
+        """
+
+        def helper(root, lower=float('-inf'), upper=float('inf')):
+            if not root:
+                return True
+            if root.val <= lower or root.val >= upper:
+                return False
+            return helper(root.left, lower, root.val) and helper(root.right, root.val, upper)
+
+        return helper(root)
+
+    def rightSideView(self, root):
+        """
+        二叉树的右视图
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        res = []
+        if not root:
+            return res
+        queue = [root]
+        while queue:
+            qsize = len(queue)
+            res.append(queue[-1].val)
+            for _ in range(qsize):
+                node = queue.pop(0)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+        return res
+
     def isSubStructure(self, A, B):
         """
         判断树B是否树A的子结构
@@ -83,6 +237,24 @@ class Solution(object):
             return self.isSubStructure(A.left, B) or self.isSubStructure(A.right, B)
         return False
 
+    def isSymmetric(self, root):
+        """
+        是否镜像树
+        :param root:
+        :return:
+        """
+
+        def isReverse(A, B):
+            if not A and not B:
+                return True
+            if A and B:
+                if A.val != B.val:
+                    return False
+                return isReverse(A.left, B.right) and isReverse(A.right, B.left)
+            return False
+
+        return isReverse(root.left, root.right) if root else True
+
     def binaryTreePaths(self, root):
         # write your code here
         # 从根节点到叶子节点的所有路径
@@ -101,6 +273,27 @@ class Solution(object):
 
         dfs(root)
         return ['->'.join(x) for x in res]
+
+    def maxPathSum(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        res = []
+        res.append(float('-inf'))
+
+        def pathSum(root):
+            if not root:
+                return 0
+            left_val = pathSum(root.left)
+            right_val = pathSum(root.right)
+            curr = root.val + max(left_val, 0) + max(right_val, 0)
+            if curr > res[0]:
+                res[0] = curr
+            return root.val + max(left_val, right_val, 0)
+
+        pathSum(root)
+        return res[0]
 
 
 class Codec:

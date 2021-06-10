@@ -73,3 +73,37 @@ class Solution(object):
                 stack.pop()
                 i += 1
         return not stack
+
+    def isValid(self, s):
+        """
+        判断是否有效的括号
+        :type s: str
+        :rtype: bool
+        """
+        n = len(s)
+        if n == 0:
+            return True
+        stack = []
+        for ch in s:
+            if ch == '(' or ch == '[' or ch == '{':
+                stack.append(ch)
+            else:
+                if len(stack) == 0:
+                    return False
+                top_ch = stack[-1]
+                if ch == ')':
+                    if top_ch == '(':
+                        stack.pop()
+                    else:
+                        return False
+                if ch == ']':
+                    if top_ch == '[':
+                        stack.pop()
+                    else:
+                        return False
+                if ch == '}':
+                    if top_ch == '{':
+                        stack.pop()
+                    else:
+                        return False
+        return len(stack) == 0

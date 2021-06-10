@@ -72,6 +72,28 @@ class Solution(object):
         n = len(nums) - n + 1
         return kthminElement(n, nums, 0, len(nums) - 1)
 
+    def exchange(self, nums, i, j):
+        nums[i], nums[j] = nums[j], nums[i]
+
+    def BubbleSort(self, nums):
+        # 冒泡排序
+        n = len(nums)
+        for i in range(n):
+            for j in range(n - i - 1):
+                if nums[j] > nums[j + 1]:
+                    nums[j], nums[j + 1] = nums[j + 1], nums[j]
+
+    def InsertionSort(self, nums):
+        # 插入排序
+        n = len(nums)
+        for i in range(1, n):
+            j = i - 1
+            x = nums[i]
+            while j >= 0 and nums[j] > x:
+                nums[j + 1] = nums[j]
+                j -= 1
+            nums[j + 1] = x
+
     def partition(self, nums, p, r):
         i = p - 1
         for j in range(p, r):
