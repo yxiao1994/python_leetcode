@@ -11,6 +11,7 @@ class TreeNode(object):
 class Solution(object):
     def preorderTraversal(self, root):
         """
+        二叉树先序遍历
         :type root: TreeNode
         :rtype: List[int]
         """
@@ -29,6 +30,7 @@ class Solution(object):
 
     def inorderTraversal(self, root):
         """
+        二叉树中序遍历
         :type root: TreeNode
         :rtype: List[int]
         """
@@ -129,6 +131,7 @@ class Solution(object):
 
     def zigzagLevelOrder(self, root):
         """
+        二叉树zigzag遍历
         :type root: TreeNode
         :rtype: List[List[int]]
         """
@@ -297,7 +300,7 @@ class Solution(object):
 
 
 class Codec:
-
+    # 二叉树序列化、反序列化
     def serialize(self, root):
         """Encodes a tree to a single string.
 
