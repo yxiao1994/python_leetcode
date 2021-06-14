@@ -1,6 +1,7 @@
 class Solution(object):
     def exist(self, board, word):
         """
+        矩阵中的路径
         :type board: List[List[str]]
         :type word: str
         :rtype: bool
@@ -34,6 +35,7 @@ class Solution(object):
 
     def permutation(self, s):
         """
+        字符串的排列
         :type s: str
         :rtype: List[str]
         """
@@ -91,53 +93,64 @@ class Solution(object):
             if start == n:
                 res.append(temp[:])
                 return
+            dfs(start + 1)
             temp.append(nums[start])
             dfs(start + 1)
             temp.pop()
-            dfs(start + 1)
 
         dfs(0)
         return res
 
-    def subsets2(self, nums):
-        # write your code here
+    def subsetsWithDup(self, nums):
+        """
+        包含重复元素的子集
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
         res = []
+        n = len(nums)
+        if n == 0:
+            return res
+        nums = sorted(nums)
         temp = []
 
-        def dfs(i):
-            if i == len(nums):
+        def dfs(choosePre, start):
+            if start == n:
                 res.append(temp[:])
                 return
-            dfs(i + 1)
-            temp.append(nums[i])
-            dfs(i + 1)
+            dfs(False, start + 1)
+            if not choosePre and start >= 1 and nums[start] == nums[start - 1]:
+                return
+            temp.append(nums[start])
+            dfs(True, start + 1)
+            temp.pop()
 
-        dfs(0)
+        dfs(False, 0)
         return res
 
     def generateParenthesis(self, n):
         """
-        生成括号
+        括号生成
         :type n: int
         :rtype: List[str]
         """
         temp = []
         res = []
 
-        def dfs(temp, left, right):
+        def dfs(left, right):
             if len(temp) == 2 * n:
                 res.append(''.join(temp[:]))
                 return
             if left < n:
                 temp.append('(')
-                dfs(temp, left + 1, right)
+                dfs(left + 1, right)
                 temp.pop()
-            if right < left:
+            if right < n and right < left:
                 temp.append(')')
-                dfs(temp, left, right + 1)
+                dfs(left, right + 1)
                 temp.pop()
 
-        dfs(temp, 0, 0)
+        dfs(0, 0)
         return res
 
     def numIslands(self, grid):
@@ -162,6 +175,41 @@ class Solution(object):
                     res += 1
                     dfs(grid, i, j, m, n)
         return res
+
+    def surrounded_region(self, board):
+        """
+        被围绕的区域
+        :type board: List[List[str]]
+        :rtype: None Do not return anything, modify board in-place instead.
+        """
+        m = len(board)
+        if m == 0:
+            return
+        n = len(board[0])
+
+        def dfs(i, j):
+            if board[i][j] != 'O':
+                return
+            board[i][j] = '#'
+            directions = ((-1, 0), (1, 0), (0, 1), (0, -1))
+            for dx, dy in directions:
+                x = i + dx
+                y = j + dy
+                if 0 <= x < m and 0 <= y < n and board[x][y] == 'O':
+                    dfs(x, y)
+
+        for j in range(0, n):
+            dfs(0, j)
+            dfs(m - 1, j)
+        for i in range(1, m - 1):
+            dfs(i, 0)
+            dfs(i, n - 1)
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'O':
+                    board[i][j] = 'X'
+                if board[i][j] == '#':
+                    board[i][j] = 'O'
 
 
 if __name__ == "__main__":

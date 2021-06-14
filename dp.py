@@ -1,12 +1,13 @@
 class Solution(object):
     def longestPalindrome(self, s):
         """
+        最长回文子串
         :type s: str
         :rtype: str
         """
         n = len(s)
         res = ''
-        dp = [[False for i in range(n)] for j in range(n)]
+        dp = [[False for _ in range(n)] for _ in range(n)]
         for k in range(0, n):
             for i in range(0, n - k):
                 j = i + k
@@ -85,32 +86,6 @@ class Solution(object):
                     dp[i] = max(dp[i], dp[j] + 1)
         return max(dp)
 
-    def lengthOfLISII(self, nums):
-        """
-        最长递增子序列,n*log(n)版本
-        :param nums:
-        :return:
-        """
-        dp = []
-        n = len(nums)
-        if n == 0:
-            return 0
-        dp.append(nums[0])
-        for i in range(n):
-            if nums[i] > dp[-1]:
-                dp.append(nums[i])
-            else:
-                l, r = 0, len(dp) - 1
-                loc = r
-                while l <= r:
-                    mid = (l + r) // 2
-                    if nums[i] > dp[mid]:
-                        l = mid + 1
-                    else:
-                        loc = mid
-                        r = mid - 1
-                dp[loc] = nums[i]
-        return len(dp)
 
     def longestValidParentheses(self, s):
         """

@@ -65,9 +65,28 @@ class Solution(object):
             curr.next = ListNode(sum)
         return dummy.next
 
+    def oddEvenList(self, head):
+        """
+        给定一个单链表，把所有的奇数节点和偶数节点分别排在一起
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head:
+            return
+        p1 = head
+        p2 = head.next
+        temp = head.next
+        while p2 and p2.next:
+            p1.next = p2.next
+            p1 = p1.next
+            p2.next = p1.next
+            p2 = p2.next
+        p1.next = temp
+        return head
+
     def removeNthFromEnd(self, head, n):
         """
-        删除倒数第n节点
+        删除倒数第n个节点
         :type head: ListNode
         :type n: int
         :rtype: ListNode
