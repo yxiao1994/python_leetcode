@@ -38,24 +38,23 @@ class Solution(object):
         :param nums:
         :return:
         """
-        dp = []
         n = len(nums)
         if n == 0:
             return 0
-        dp.append(nums[0])
-        for i in range(n):
-            if nums[i] > dp[-1]:
-                dp.append(nums[i])
+        dp = [nums[0]]
+        for i in range(1, n):
+            x = nums[i]
+            if x > dp[-1]:
+                dp.append(x)
             else:
-                l, r = 0, len(dp) - 1
-                loc = r
-                while l <= r:
-                    mid = (l + r) // 2
-                    if nums[i] > dp[mid]:
-                        l = mid + 1
+                low = 0
+                high = len(dp) - 1
+                while low <= high:
+                    mid = (low + high) // 2
+                    if dp[mid] < x:
+                        low = mid + 1
                     else:
-                        loc = mid
-                        r = mid - 1
-                dp[loc] = nums[i]
+                        high = mid - 1
+                dp[low] = x
         return len(dp)
 

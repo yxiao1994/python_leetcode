@@ -194,35 +194,32 @@ class Solution(object):
         """
         if not head:
             return None
-        point_dic = {}
-        pcurr = head
-        new_node = Node(head.val)
-        pnew = new_node
-        point_dic[head] = new_node
+        pold = head
+        new_head = Node(head.val)
+        pnew = new_head
+        dic = dict()
+        dic[head] = new_head
 
-        while pcurr:
-            pnext = pcurr.next
+        while pold:
+            pnext = pold.next
             if pnext:
-                if pnext not in point_dic:
+                if pnext in dic:
+                    pnew.next = dic[pnext]
+                else:
                     node = Node(pnext.val)
-                    point_dic[pnext] = node
+                    dic[pnext] = node
                     pnew.next = node
-                else:
-                    pnew.next = point_dic[pnext]
-
-            prandom = pcurr.random
+            prandom = pold.random
             if prandom:
-                if prandom not in point_dic:
-                    node = Node(prandom.val)
-                    point_dic[prandom] = node
-                    pnew.random = node
+                if prandom in dic:
+                    pnew.random = dic[prandom]
                 else:
-                    pnew.random = point_dic[prandom]
-
-            pcurr = pnext
+                    node = Node(prandom.val)
+                    dic[prandom] = node
+                    pnew.random = node
+            pold = pold.next
             pnew = pnew.next
-
-        return new_node
+        return new_head
 
     def hasCycle(self, head):
         """
