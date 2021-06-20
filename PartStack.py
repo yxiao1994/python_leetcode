@@ -107,3 +107,30 @@ class Solution(object):
                     else:
                         return False
         return len(stack) == 0
+
+    def largestRectangleArea(self, heights):
+        """
+        柱状图中最大的矩形
+        :type heights: List[int]
+        :rtype: int
+        """
+        n = len(heights)
+        if n == 0:
+            return 0
+        left, right = [0] * n, [0] * n
+        stack = []
+        for i in range(n):
+            while stack and heights[stack[-1]] >= heights[i]:
+                stack.pop()
+            left[i] = stack[-1] if stack else - 1
+            stack.append(i)
+        stack = []
+        for i in range(n - 1, -1, -1):
+            while stack and heights[stack[-1]] >= heights[i]:
+                stack.pop()
+            right[i] = stack[-1] if stack else n
+            stack.append(i)
+        max_area = 0
+        for i in range(n):
+            max_area = max(max_area, (right[i] - left[i] - 1) * heights[i])
+        return max_area

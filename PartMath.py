@@ -130,3 +130,29 @@ class Solution(object):
             else:
                 right = mid - 1
         return right
+
+    def multiply(self, num1, num2):
+        """
+        字符串相乘
+        :type num1: str
+        :type num2: str
+        :rtype: str
+        """
+        m, n = len(num1), len(num2)
+        if num1 == '0' or num2 == '0':
+            return '0'
+        res = [0 for _ in range(m + n)]
+        num1 = num1[::-1]
+        num2 = num2[::-1]
+        for i in range(m):
+            for j in range(n):
+                res[i + j] += int(num1[i]) * int(num2[j])
+        carry = 0
+        for i in range(m + n):
+            res[i] += carry
+            carry = res[i] // 10
+            res[i] %= 10
+        if res[-1] == 0:
+            res = res[:-1]
+        res = res[::-1]
+        return ''.join([str(x) for x in res])

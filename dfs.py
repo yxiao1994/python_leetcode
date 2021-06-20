@@ -12,26 +12,58 @@ class Solution(object):
         n = len(board[0])
         visited = [[False for _ in range(n)] for _ in range(m)]
 
-        def check(i, j, k, word, m, n, visited):
+        def check(i, j, k):
             if k == len(word) - 1:
-                return board[i][j] == word[k]
+                return board[i][j] == word[-1]
             if board[i][j] != word[k]:
                 return False
             visited[i][j] = True
-            for dx, dy in ((-1, 0), (1, 0), (0, 1), (0, -1)):
+            directions = ((-1, 0), (1, 0), (0, 1), (0, -1))
+            for dx, dy in directions:
                 x = i + dx
                 y = j + dy
                 if 0 <= x < m and 0 <= y < n and not visited[x][y]:
-                    if check(x, y, k + 1, word, m, n, visited):
+                    if check(x, y, k + 1):
                         return True
             visited[i][j] = False
             return False
 
         for i in range(m):
             for j in range(n):
-                if check(i, j, 0, word, m, n, visited):
+                if check(i, j, 0):
                     return True
         return False
+
+    def longestIncreasingPath(self, matrix):
+        """
+        矩阵中的最长递增路径长度
+        :type matrix: List[List[int]]
+        :rtype: int
+        """
+        m = len(matrix)
+        if m == 0:
+            return 0
+        n = len(matrix[0])
+        dp = [[0 for _ in range(n)] for _ in range(m)]
+        directions = ((-1, 0), (1, 0), (0, 1), (0, -1))
+
+        def dfs(i, j):
+            if dp[i][j] != 0:
+                return dp[i][j]
+            max_path = 1
+            for dx, dy in directions:
+                x = i + dx
+                y = j + dy
+                if 0 <= x < m and 0 <= y < n and matrix[i][j] > matrix[x][y]:
+                    max_path = max(max_path, dfs(x, y) + 1)
+            dp[i][j] = max_path
+            return max_path
+
+        res = 0
+        for i in range(m):
+            for j in range(n):
+                res = max(res, dfs(i, j))
+        return res
 
     def permutation(self, s):
         """

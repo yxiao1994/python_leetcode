@@ -214,3 +214,24 @@ class Solution:
                 char_set.remove(s[left])
                 left += 1
         return res
+
+    def numSubarrayProductLessThanK(self, nums, k):
+        """
+        乘积小于K的子数组
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        if k <= 1:
+            return 0
+        left = 0
+        x = 1
+        count = 0
+        for right in range(len(nums)):
+            x *= nums[right]
+            while x >= k:
+                x /= nums[left]
+                left += 1
+            count += (right - left + 1)
+        return count
+

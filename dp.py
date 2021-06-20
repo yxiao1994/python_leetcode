@@ -194,6 +194,29 @@ class Solution(object):
                 p5 += 1
         return dp[n]
 
+    def maximalSquare(self, matrix):
+        """
+        矩阵中只包含 '1' 的最大正方形面积
+        :type matrix: List[List[str]]
+        :rtype: int
+        """
+        m = len(matrix)
+        if m == 0:
+            return 0
+        n = len(matrix[0])
+        dp = [[0 for _ in range(n)] for _ in range(m)]
+        res = 0
+        for i in range(m):
+            for j in range(n):
+                if matrix[i][j] == '1':
+                    dp[i][j] = 1
+                    if i == 0 or j == 0:
+                        dp[i][j] = 1
+                    else:
+                        dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1
+                    res = max(res, dp[i][j])
+        return res * res
+
 
 if __name__ == "__main__":
     obj = Solution()
