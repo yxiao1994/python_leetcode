@@ -166,6 +166,52 @@ class Solution(object):
         n = len(nums) - n + 1
         return kthminElement(n, nums, 0, len(nums) - 1)
 
+    def findMedianSortedArrays(self, nums1, nums2):
+        """
+        寻找两个正序数组的中位数
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: float
+        """
+
+        def findkth(nums1, start1, nums2, start2, k):
+            if start1 >= len(nums1):
+                return nums2[start2 + k - 1]
+            if start2 >= len(nums2):
+                return nums1[start1 + k - 1]
+            if k == 1:
+                return min(nums1[start1], nums2[start2])
+            index1 = start1 + k // 2 - 1
+            index2 = start2 + k // 2 - 1
+            val1 = nums1[index1] if index1 < len(nums1) else float('inf')
+            val2 = nums2[index2] if index2 < len(nums2) else float('inf')
+            if val1 < val2:
+                return findkth(nums1, index1 + 1, nums2, start2, k - k // 2)
+            else:
+                return findkth(nums1, start1, nums2, index2 + 1, k - k // 2)
+
+        m, n = len(nums1), len(nums2)
+        if ((m + n) % 2) == 1:
+            return findkth(nums1, 0, nums2, 0, (m + n + 1) // 2)
+        else:
+            return (findkth(nums1, 0, nums2, 0, (m + n) // 2) + findkth(nums1, 0, nums2, 0, (m + n) // 2 + 1)) * 0.5
+
+    def findPeakElement(self, nums):
+        """
+        寻找峰值
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        left, right = 0, n - 1
+        while left < right:
+            mid = (left + right) // 2
+            if nums[mid] <= nums[mid + 1]:
+                left = mid + 1
+            else:
+                right = mid
+        return left
+
 
 if __name__ == "__main__":
     obj = Solution()

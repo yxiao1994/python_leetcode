@@ -217,6 +217,43 @@ class Solution(object):
                     res = max(res, dp[i][j])
         return res * res
 
+    def rob(self, nums):
+        """
+        打家劫舍
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        if n == 0:
+            return 0
+        if n == 1:
+            return nums[0]
+        dp = [0 for _ in range(n)]
+        dp[0] = nums[0]
+        dp[1] = max(nums[0], nums[1])
+        for i in range(2, n):
+            dp[i] = max(dp[i - 2] + nums[i], dp[i - 1])
+        return dp[n - 1]
+
+    def rob_in_tree(self, root):
+        """
+        二叉树中的打家劫舍
+        :type root: TreeNode
+        :rtype: int
+        """
+
+        def dfs(root):
+            if not root:
+                return 0, 0
+            l = dfs(root.left)
+            r = dfs(root.right)
+            selected = root.val + l[0] + r[0]
+            not_selected = max(l) + max(r)
+            return not_selected, selected
+
+        res = dfs(root)
+        return max(res)
+
 
 if __name__ == "__main__":
     obj = Solution()
