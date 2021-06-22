@@ -46,32 +46,6 @@ class Solution(object):
                 heapq.heapreplace(res, -num)
         return [-x for x in res]
 
-    def kthLargestElement(self, n, nums):
-        # 第k大元素
-        def partition(nums, p, r):
-            i = p - 1
-            for j in range(p, r):
-                if nums[j] < nums[r]:
-                    i += 1
-                    nums[i], nums[j] = nums[j], nums[i]
-            i += 1
-            nums[i], nums[r] = nums[r], nums[i]
-            return i
-
-        def kthminElement(n, nums, p, r):
-            # write your code here
-            q = partition(nums, p, r)
-            k = q - p + 1
-            if k == n:
-                return nums[q]
-            elif k < n:
-                return kthminElement(n - k, nums, q + 1, r)
-            else:
-                return kthminElement(n, nums, p, q - 1)
-
-        n = len(nums) - n + 1
-        return kthminElement(n, nums, 0, len(nums) - 1)
-
     def exchange(self, nums, i, j):
         nums[i], nums[j] = nums[j], nums[i]
 

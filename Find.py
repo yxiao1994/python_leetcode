@@ -119,7 +119,7 @@ class Solution(object):
 
     def findMin(self, nums):
         """
-        旋转数组查找最小数字
+        旋转数组最小数字
         :type nums: List[int]
         :rtype: int
         """
@@ -128,8 +128,13 @@ class Solution(object):
         high = n - 1
         while low + 1 < high:
             mid = (low + high) // 2
-            if nums[mid] > nums[high]:
-                low = mid
+            if nums[mid] == nums[high]:
+                x = float('inf')
+                for i in range(low, high + 1):
+                    x = min(x, nums[i])
+                return x
+            elif nums[mid] > nums[high]:
+                low = mid + 1
             else:
                 high = mid
         return min(nums[low], nums[high])
