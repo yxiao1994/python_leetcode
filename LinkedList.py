@@ -238,6 +238,24 @@ class Solution(object):
             pslow = pslow.next
         return True
 
+    def detectCycle(self, head):
+        """
+        环形链表入口
+        :param head:
+        :return:
+        """
+        fast, slow = head, head
+        while True:
+            if not fast or not fast.next:
+                return
+            fast, slow = fast.next.next, slow.next
+            if fast == slow:
+                break
+        fast = head
+        while fast != slow:
+            fast, slow = fast.next, slow.next
+        return fast
+
     def sortList(self, head):
         """
         链表排序
@@ -308,6 +326,41 @@ class Solution(object):
             A = A.next if A else headB
             B = B.next if B else headA
         return A
+
+    def reverseKGroup(self, head, k):
+        """
+        k个一组翻转链表
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        """
+
+        def reverse(head, tail):
+            pbefore = tail.next
+            pcurr = head
+            while pbefore != tail:
+                pnext = pcurr.next
+                pcurr.next = pbefore
+                pbefore = pcurr
+                pcurr = pnext
+            return tail, head
+
+        dummy = ListNode(0)
+        dummy.next = head
+        pre = dummy
+        while head:
+            tail = pre
+            for i in range(k):
+                tail = tail.next
+                if not tail:
+                    return dummy.next
+            pnext = tail.next
+            head, tail = reverse(head, tail)
+            pre.next = head
+            tail.next = pnext
+            pre = tail
+            head = tail.next
+        return dummy.next
 
 
 if __name__ == "__main__":

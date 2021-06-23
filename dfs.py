@@ -208,6 +208,38 @@ class Solution(object):
                     dfs(grid, i, j, m, n)
         return res
 
+    def numDistinctIslands(self, grid):
+        """
+        不同岛屿的数量
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        Row, Col = len(grid), len(grid[0])
+        visited = [[False for _ in range(Col)] for _ in range(Row)]
+
+        def dfs(r, c):
+            if visited[r][c]:
+                return
+            visited[r][c] = 1
+
+            nxt = [(r, c + 1), (r + 1, c), (r, c - 1), (r - 1, c)]
+            for i in range(4):
+                nr, nc = nxt[i]
+                if 0 <= nr < Row and 0 <= nc < Col and grid[nr][nc] == 1:
+                    self.path += str(i + 1)
+                    dfs(nr, nc)
+
+        rec = set()
+
+        for r in range(Row):
+            for c in range(Col):
+                if grid[r][c] == 1 and visited[r][c] == False:
+                    self.path = "0"
+                    dfs(r, c)
+                    rec.add(self.path)
+
+        return len(rec)
+
     def surrounded_region(self, board):
         """
         被围绕的区域
