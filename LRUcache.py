@@ -7,7 +7,6 @@ class DLinkedNode:
 
 
 class LRUCache:
-
     def __init__(self, capacity):
         self.cache = dict()
         # 使用伪头部和伪尾部节点
