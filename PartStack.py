@@ -134,3 +134,29 @@ class Solution(object):
         for i in range(n):
             max_area = max(max_area, (right[i] - left[i] - 1) * heights[i])
         return max_area
+
+    def calculate(s):
+        """
+        字符串加减乘除
+        :type s: str
+        :rtype: int
+        """
+        n = len(s)
+        stack = []
+        sign = '+'
+        num = 0
+        for i in range(n):
+            if s[i] != ' ' and s[i].isdigit():
+                num = num * 10 + int(s[i])
+            if i == n - 1 or s[i] in '+-*/':
+                if sign == '+':
+                    stack.append(num)
+                elif sign == '-':
+                    stack.append(-num)
+                elif sign == '*':
+                    stack.append(stack.pop() * num)
+                else:
+                    stack.append(int(stack.pop() / num))
+                sign = s[i]
+                num = 0
+        return sum(stack)

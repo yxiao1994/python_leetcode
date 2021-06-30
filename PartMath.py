@@ -157,6 +157,41 @@ class Solution(object):
         res = res[::-1]
         return ''.join([str(x) for x in res])
 
+    def calculate(self, s):
+        """
+        字符串运算
+        :type s: str
+        :rtype: int
+        """
+        stack = [1]
+        sign = 1
+
+        res = 0
+        n = len(s)
+        i = 0
+        while i < n:
+            if s[i] == ' ':
+                i += 1
+            elif s[i] == '+':
+                sign = stack[-1]
+                i += 1
+            elif s[i] == '-':
+                sign = -stack[-1]
+                i += 1
+            elif s[i] == '(':
+                stack.append(sign)
+                i += 1
+            elif s[i] == ')':
+                stack.pop()
+                i += 1
+            else:
+                num = 0
+                while i < n and s[i].isdigit():
+                    num = num * 10 + int(s[i])
+                    i += 1
+                res += num * sign
+        return res
+
     def rand10(self):
         """
         :rtype: int
