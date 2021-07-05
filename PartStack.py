@@ -135,7 +135,7 @@ class Solution(object):
             max_area = max(max_area, (right[i] - left[i] - 1) * heights[i])
         return max_area
 
-    def calculate(s):
+    def calculate(selg, s):
         """
         字符串加减乘除
         :type s: str
@@ -160,3 +160,8 @@ class Solution(object):
                 sign = s[i]
                 num = 0
         return sum(stack)
+
+
+if __name__ == "__main__":
+    obj = Solution()
+    print(obj.calculate('14-3/2'))

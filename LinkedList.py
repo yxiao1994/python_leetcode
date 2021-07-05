@@ -148,6 +148,23 @@ class Solution(object):
         pslow.next = pfast.next
         return dummy.next
 
+    def deleteDuplicates(self, head):
+        """
+        删除排序链表中的重复元素
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head or not head.next:
+            return head
+        pslow = head
+        pfast = head.next
+        while pfast:
+            while pfast and pfast.val == pslow.val:
+                pfast = pfast.next
+            pslow.next = pfast
+            pslow = pfast
+        return head
+
     def reverseList(self, head):
         """
         链表反转
